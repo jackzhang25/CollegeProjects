@@ -1,0 +1,129 @@
+//////////////// FILE HEADER (INCLUDE IN EVERY FILE) //////////////////////////
+//
+// Title:    WalkingSim
+// Course:   CS 300 Fall 2022
+//
+// Author:   Jack Zhang
+// Email:    jzhang2534@wisc.edu
+// Lecturer: Jeff Nyhoff
+//
+///////////////////////// ALWAYS CREDIT OUTSIDE HELP //////////////////////////
+//
+// Persons:         NONE
+// Online Sources:  NONE
+//
+///////////////////////////////////////////////////////////////////////////////
+import java.util.Random;
+import java.io.File;
+import processing.core.PImage;
+
+/**
+ * This class creates Walkers and Simulate their walking cycle
+ */
+public class WalkingSim {
+  private static Walker[] walkers;
+  private static Random randGen;
+  private static int bgColor;
+  private static PImage[] frames;
+  
+  public static void main(String[] args) {
+    Utility.runApplication();
+  }
+  /**
+   * Setup and initializes all the variables and creates the walkers random locations
+   */
+  public static void setup() {
+    walkers = new Walker[8];
+    frames = new PImage[Walker.NUM_FRAMES];
+    for (int i = 0; i < frames.length; i++ ) {
+      frames[i] = Utility.loadImage("images"+ File.separator +"walk-"+ i +".png");
+    }
+    randGen = new Random();
+    bgColor = randGen.nextInt();
+    int numWalkers = randGen.nextInt(1, walkers.length+1);
+    for (int i = 0; i < numWalkers; i++) {
+      walkers[i] = new Walker(randGen.nextInt
+          (0, Utility.width()), randGen.nextInt(0, Utility.height()));
+    }
+  }
+  /**
+   * draws all of the walkers and updates the frames when needed
+   */
+  public static void draw() {
+    Utility.background(bgColor);
+    for (int i = 0; i < walkers.length; i++) {
+      if (walkers[i] == null) {
+        break;
+      }
+      Utility.image(frames[walkers[i].getCurrentFrame()], walkers[i].getPositionX(),
+          walkers[i].getPositionY());
+      if (walkers[i].isWalking()) {
+        walkers[i].setPositionX((walkers[i].getPositionX() + 3) % Utility.width());
+        walkers[i].update();;
+      }
+      
+    }
+    
+  }
+  /**
+   * extra helper method that checks if the mouse is over a certain walker
+   * @param Walker object
+   * @return true if the mouse is over the walker parameter and false if it isn't
+   */
+  public static boolean isMouseOver(Walker walker) {
+    PImage currFrame = frames[walker.getCurrentFrame()];
+    int width = currFrame.width;
+    int height = currFrame.height;
+    int x = Utility.mouseX();
+    int y = Utility.mouseY();
+    int posX = (int) walker.getPositionX();
+    int posY = (int) walker.getPositionY();
+    if (!(x > (posX - width / 2) && x < (posX + width /2) )) {
+      return false;
+    }
+    if (!(y > (posY - height / 2) && y < (posY + height / 2))) {
+      return false;
+    }
+    return true;
+  }
+  /**
+   * Checks if when the mouse is pressed, the mouse is over a walker and if it is it sets 
+   * walking to true
+   */
+  public static void mousePressed() {
+    for (int i = 0; i < walkers.length; i++) {
+      if (walkers[i] == null) {
+        break;
+      }
+      if (isMouseOver(walkers[i])) {
+        walkers[i].setWalking(true);
+      }
+    }
+  }
+  /**
+   * If a key is pressed and its 'a' or 'A' then another walker is added to the screen
+   * If a key is pressed and its 's' or 'S' then all walkers stop walking
+   * @param a character of the key that is pressed
+   */
+  public static void keyPressed(char character) {
+    if (character == 'a' || character == 'A') {
+      for (int i = 0; i < walkers.length; i++) {
+        if (walkers[i] == null) {
+          walkers[i] = walkers[i] = new Walker(randGen.nextInt
+              (0, Utility.width()), randGen.nextInt(0, Utility.height()));
+          
+          break;
+        }
+      }
+    }
+    
+    if (character == 's' || character == 'S') {
+      for (int i = 0; i < walkers.length; i++) {
+        if (walkers[i] == null) {
+          break;
+        }
+        walkers[i].setWalking(false);
+      }
+    }
+  }
+}
