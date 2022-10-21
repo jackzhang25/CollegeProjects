@@ -1,0 +1,86 @@
+//////////////// FILE HEADER (INCLUDE IN EVERY FILE) //////////////////////////
+//
+// Title:    Item
+// Course:   CS 300 Fall 2022
+//
+// Author:   Jack Zhang
+// Email:    jzhang2534@wisc.edu
+// Lecturer: Jeff Nyhoff
+//
+///////////////////////// ALWAYS CREDIT OUTSIDE HELP //////////////////////////
+//
+// Persons:         NONE
+// Online Sources:  NONE
+//
+///////////////////////////////////////////////////////////////////////////////
+import java.util.Objects;
+
+/**
+ * This class models a item that contains description and expirationDate 
+ */
+public class Item {
+  private String description;
+  private int expirationDate;
+  /**
+   * Constructor of Item that checks if the inputs are correct and sets the values 
+   * if they are correct
+   * 
+   * @param a String description and int expirationdate
+   */
+  public Item(String description, int expirationDate) throws IllegalArgumentException{
+    if (Objects.isNull(description) || description.isBlank() || expirationDate < 0) {
+      throw new IllegalArgumentException("description is null or empty or expirationDate is negative");
+    }
+    this.description = description;
+    this.expirationDate = expirationDate;
+  }
+  /**
+   * returns description
+   * 
+   * @return the description
+   */
+  public String getDescription() {
+    return description;
+  }
+  /**
+   * sets the description of the item to the parameter if it is a valid description
+   * 
+   * @param a new String description 
+   */
+  public void setDescription(String description) throws IllegalArgumentException{
+    if (description == null || description.isBlank()) {
+      throw new IllegalArgumentException("description was null or blank");
+    }
+    this.description = description;
+  }
+  /**
+   * returns expirationDate
+   * 
+   * @return the expirateion date
+   */
+  public int getExpirationDate() {
+    return expirationDate;
+  }
+  /**
+   * returns the item in string form of "description: expirationDate"
+   * 
+   * @return the string
+   */
+  @Override
+  public String toString() {
+    return description + ": " + expirationDate;
+  }
+  /**
+   * compares the current item to a separate object, if it isnt a item then it returns false
+   * returns true when the description equals the other items description
+   * 
+   * @return boolean whether the descriptions match
+   */
+  @Override
+  public boolean equals(Object other) {
+    if (!(other instanceof Item)) {
+      return false;
+    }
+    return  ((Item) other).getDescription().compareTo(getDescription()) == 0;
+  }
+}
