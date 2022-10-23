@@ -1,0 +1,159 @@
+//////////////// FILE HEADER (INCLUDE IN EVERY FILE) //////////////////////////
+//
+// Title:    Dragon Treasure Adventure
+// Course:   CS 300 Fall 2022
+//
+// Author:   Jack Zhang
+// Email:    jzhang2534@wisc.edu
+// Lecturer: Jeff Nyhoff
+//
+///////////////////////// ALWAYS CREDIT OUTSIDE HELP //////////////////////////
+//
+// Persons:         NONE
+// Online Sources:  NONE
+//
+///////////////////////////////////////////////////////////////////////////////
+import java.util.ArrayList;
+import java.util.Random;
+/**
+ * This class models a Room that contains descriptions, types, and all adjacent rooms to itself
+ */
+public class Room {
+  private RoomType type; //one of the four types a room could be
+  private String roomDescription; //a brief description of the room
+  private ArrayList<Room> adjRooms; //arraylist that holds the rooms adjacent
+  private final int ID; //unique ID for each room to identify it
+  private static int teleportLocationID; //place where all portal rooms will go to
+  private static final String PORTAL_WARNING = "You feel a distortion in space nearby.\n";
+  private static final String TREASURE_WARNING = "You sense that there is treasure nearby.\n";
+  /**
+   * Constructor of the Room class that accepts a id and description 
+   * 
+   * @param a integer id and a String roomDescription
+   */
+  public Room(int id, String roomDescription) {
+    ID = id;
+    this.roomDescription = roomDescription;
+    type = RoomType.NORMAL;
+    adjRooms = new ArrayList<>();
+  }
+  /**
+   * returns the id of the room
+   * 
+   * @return a int id of the room
+   */
+  public int getID() {
+    return ID;
+  }
+  /**
+   * returns the type of the room
+   * 
+   * @return a RoomType type of the room
+   */
+  public RoomType getType() {
+    return type;
+  }
+  /**
+   * returns the adjacent rooms of the room
+   * 
+   * @return a ArrayList of rooms that represnt the adjacent rooms of the room
+   */
+  public ArrayList<Room> getAdjacentRooms() {
+    return adjRooms;
+  }
+  /**
+   * adds a room to the adjacent rooms arraylist
+   * 
+   * @param a room object that is to be added to the arraylist
+   */
+  public void addToAdjacentRooms(Room toAdd) {
+    adjRooms.add(toAdd);
+  }
+  /**
+   * returns the description of the room
+   * 
+   * @return a String description of the room
+   */
+  public String getRoomDescription() {
+    return roomDescription;
+  }
+  /**
+   * sets the RoomType of the room to a given roomtype
+   * 
+   * @param a RoomType newType
+   */
+  public void setRoomType(RoomType newType) {
+    type = newType;
+  }
+  /**
+   * sets the teleportLocation of the room to a given id
+   * 
+   * @param a int teleportId 
+   */
+  public static void assignTeleportLocation(int teleportID) {
+    teleportLocationID = teleportID;
+  }
+  /**
+   * returns the portal warning string 
+   * 
+   * @return a string PORTAL_WARNING
+   */
+  public static String getPortalWarning() {
+    return PORTAL_WARNING;
+  }
+  /**
+   * returns the treasure warning string 
+   * 
+   * @return a string TREASURE_WARNING
+   */
+  public static String getTreasureWarning() {
+    return TREASURE_WARNING;
+  }
+  /**
+   * returns the teleportLocation room id
+   * 
+   * @return a int teleportLocationID
+   */
+  public static int getTeleportationRoom() {
+    return teleportLocationID;
+  }
+  /**
+   * determines if a given room is adjacent to the room
+   * 
+   * @param a Room object
+   * @return true if it is adjacent and false if it isn't
+   */
+  public boolean isAdjacent(Room r) {
+    for (int i = 0; i < adjRooms.size(); i++) {
+      if (r.equals(adjRooms.get(i))) {
+        return true;
+      }
+    }
+    return false;
+  }
+  /** Determines if the given object is equal to this room.
+  * They are equal if other is a Room and their IDs are the same.
+  * @param other, another object to check if it is equal to this
+  * @return true if the two rooms are equal, false otherwise
+  * @author Michelle */
+  @Override
+  public boolean equals(Object other){
+    if(other instanceof Room) {
+      Room otherRoom = (Room)other;
+      return this.ID == otherRoom.ID;
+    }
+    return false;
+  }
+  /** Returns a String representation of this room.
+  * @return the string representation of this room and
+  * it’s object data field values
+  * @author Michelle*/
+  @Override
+  public String toString(){
+    String s = this.ID +": " + this.roomDescription+ " (" + type +")\n Adjacent Rooms: ";
+    for(int i = 0; i<adjRooms.size(); i++){
+      s+= adjRooms.get(i).ID +" ";
+    }
+    return s;
+  }
+}
