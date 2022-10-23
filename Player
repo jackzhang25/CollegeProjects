@@ -1,0 +1,114 @@
+//////////////// FILE HEADER (INCLUDE IN EVERY FILE) //////////////////////////
+//
+// Title:    Dragon Treasure Adventure
+// Course:   CS 300 Fall 2022
+//
+// Author:   Jack Zhang
+// Email:    jzhang2534@wisc.edu
+// Lecturer: Jeff Nyhoff
+//
+///////////////////////// ALWAYS CREDIT OUTSIDE HELP //////////////////////////
+//
+// Persons:         NONE
+// Online Sources:  NONE
+//
+///////////////////////////////////////////////////////////////////////////////
+import java.util.ArrayList;
+
+public class Player {
+  private Room currentRoom; 
+  /**
+   * Constructor of Player
+   * Initializes the room object
+   * 
+   * @param a Room object
+   */
+  public Player(Room currentRoom) {
+    this.currentRoom = currentRoom;
+  }
+  /**
+   * Returns current room
+   * 
+   * @return currentRoom
+   */
+  public Room getCurrentRoom() {
+    return currentRoom;
+  }
+  /**
+   * Replaces currentRoom with newRoom
+   * 
+   * @param a new room object
+   */
+  public void changeRoom(Room newRoom) {
+    currentRoom = newRoom;
+  }
+  /**
+   * Determines whether the player should teleport
+   * 
+   * @return returns true if the currentRoom's type is a portal room
+   */
+  public boolean shouldTeleport() {
+    return (currentRoom.getType() == RoomType.PORTAL);
+  }
+  /**
+   * Returns all adjacentRooms to the current room
+   * 
+   * @return ArrayList<Room> of all the adjacent rooms 
+   */
+  public ArrayList<Room> getAdjacentRoomsToPlayer() {
+    return currentRoom.getAdjacentRooms();
+  }
+  
+  /**
+   * Checks if there are any portal rooms in any adjacent rooms 
+   * 
+   * @return true if there is a portal room nearby and false if there isn't
+   */
+  public boolean isPortalNearby() {
+    ArrayList<Room> adj = currentRoom.getAdjacentRooms();
+    for (int i = 0; i < adj.size(); i++) {
+      if (adj.get(i).getType() == RoomType.PORTAL) {
+        return true;
+      }
+    }
+    return false;
+  }
+  /**
+   * Checks if there are any treasure rooms in any adjacent rooms 
+   * 
+   * @return true if there is a treasure room nearby and false if there isn't
+   */
+  public boolean isTreasureNearby() {
+    ArrayList<Room> adj = currentRoom.getAdjacentRooms();
+    for (int i = 0; i < adj.size(); i++) {
+      if (adj.get(i).getType() == RoomType.TREASURE) {
+        return true;
+      }
+    }
+    return false;
+  }
+  /**
+   * Checks if the player can move to the given destination
+   * 
+   * @param a destination room 
+   * @return true if there is a treasure room nearby and false if there isn't
+   */
+  public boolean canMoveTo(Room destination) {
+    ArrayList<Room> adj = currentRoom.getAdjacentRooms();
+    for (int i = 0; i < adj.size(); i++) {
+      if (adj.get(i).equals(destination)) {
+        return true;
+      }
+    }
+    return false;
+  }
+  /**
+   * Checks if there is a dragon in any adjacent rooms 
+   * 
+   * @return true if there is a dragon nearby and false if there isn't
+   */
+  public boolean isDragonNearby(Dragon d) {
+    Room r = d.getCurrentRoom();
+    return canMoveTo(r);
+  }
+}
